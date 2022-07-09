@@ -6,7 +6,7 @@ const app = express()
 const port =8080
 
 
-app.listen(port, () => console.log(`Hello world app listening on port ${port}!`))
+app.listen(process.env.PORT || port, () => console.log(`Hello world app listening on port ${port}!`))
 app.use(cors({
     origin: '*'
 }));
