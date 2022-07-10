@@ -6,17 +6,19 @@ const app = express()
 const port =8080
 
 
-app.listen(process.env.PORT || port, () => console.log(`Hello world app listening on port ${port}!`))
+app.use(express.json());
 app.use(cors({
     origin: '*'
 }));
+app.listen(process.env.PORT || port, () => console.log(`Hello world app listening on port ${port}!`))
 
-function sendMessage (){
+
+function sendMessage (details){
     return new Promise((resolve,reject)=>{
         twilio.messages.create({
-            body:"hi message from nithin",
+            body:details.message,
             from:"+12312992030",
-            to:"+918078157978"
+            to:details.phoneno
         })
         .then(res=>{
             resolve({
@@ -34,13 +36,13 @@ function sendMessage (){
         })
     })
 }
-app.get('/send',(req,res)=>{
-    sendMessage()
+app.post('/send',(req,res)=>{
+    console.log(req.body)
+    sendMessage(req.body)
     .then(data=>{
         res.json(data)
     })
     .catch(error=>{
-        res.statusCode(400)
         res.json(error)
     })
 })
